@@ -2,24 +2,23 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-email = ""
-pas = ""
+from config import email, password, pnum
+em = email
+pas = password
+number = pnum
 
-sms_gateway = 'number@txt.att.net'
+sms_gateway = pnum+'@txt.att.net'
 
-smtp = "smtp.gmail.com"
-port = 587
-
-# This will start out email server
-server = smtplib.SMTP(smtp, port)
-# starting the server
-server.starttls()
-# need to login
-server.login(email, pas)
+try:
+    server_ssl = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server_ssl.ehlo()
+    server_ssl.login(em,pas)
+except:
+    print('sometihng went wrong')
 
 # use the MIME module to structure the message
 msg = MIMEMultipart()
-msg['From'] = email
+msg['From'] = em
 msg['To'] = sms_gateway
 # Make sure you add a new line in the subject
 msg['Subject'] = "Loren imspum\n"
@@ -30,7 +29,6 @@ msg.attach(MIMEText(body, 'plain'))
 
 sms = msg.as_string()
 
-server.sendmail(email,sms_gateway,sms)
-
+server_ssl.sendmail(em,sms_gateway,sms)
 # lastly quit the server
-server.quit()
+server_ssl.quit()
