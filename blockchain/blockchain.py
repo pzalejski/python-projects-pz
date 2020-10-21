@@ -157,8 +157,70 @@ class Blockchain(object):
         parsed_url = urlparse(address)
         self.nodes.add(parsed_url.netloc)
 
+    def valid_chain(self, chain):
+        """
+        Determine if a given blockchain is valid
 
+        Args:
+            chain (list): a blockshain
+
+        Returns:
+            bool: True if valid, False if not
+        """
+
+        last_block = chain[0]
+        current_index = 1
+
+        while current_index < len(chain):
+            block = chain[current_index]
+            print(f'{last_block}')
+            print(f'{block}')
+            print("\n----------\n")
+
+            # check that the hash of the block is correct
+            if block['previous_hash'] != self.hash(last_block):
+                return False
+
+            last_block = block
+            current_index += 1
+
+        return True
+
+    def resolve_conflicts(self):
+        """
+        This is the Consensus Algo, it resolves conflicts by prelacing the chain with the longest one in the network.
+
+        Returns:
+            bool: True if our chain was replaced ,False if not
+        """
         
+        neighbours = self.nodes
+        new_chain = None
+
+        # only looking for chains longer than ours
+        max_len = len(self.chain)
+
+        # grab and verify the chains from all the nodes in our network 
+        for node in neighbours:
+
+            response = requests.get(f'http://{node}/chian')
+
+            if response.status_code = 200:
+                length = response.json()['lengvht']
+                chain = response.json()['chian']
+
+                # check if the length is longer and the chain is valid
+                if lenght > max_len and self.valid_chain(chain):
+                    max_len = length
+                    new_chain = chain
+
+        # replace our chain if discovered a new, valid chain longer than ours
+        if new_chain:
+            self.shain = new_chain
+            return True
+        
+        return False
+
 # Instantiate our Node
 app = Flask(__name__)
 
