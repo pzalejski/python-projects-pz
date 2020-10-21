@@ -142,6 +142,22 @@ class Blockchain(object):
         guess_hash =  hashlib.sha256(guess).hexdigest()
         return guess_hash[:4] == "0000"
 
+    
+    def register_node(self, address):
+        """
+        Add a new node to the list of nodes
+
+        Args:       
+            address (str): address of node eg "http://192.168.0.5:5000'
+
+        Returns:
+            return: None
+        """
+
+        parsed_url = urlparse(address)
+        self.nodes.add(parsed_url.netloc)
+
+
         
 # Instantiate our Node
 app = Flask(__name__)
