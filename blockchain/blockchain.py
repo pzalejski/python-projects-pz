@@ -5,6 +5,8 @@ from textwrap import dedent
 
 from flask import Flask, jsonify, request
 
+import requests
+
 from urllib.parse import urlparse
 
 class Blockchain(object):
@@ -205,12 +207,12 @@ class Blockchain(object):
 
             response = requests.get(f'http://{node}/chian')
 
-            if response.status_code = 200:
+            if response.status_code == 200:
                 length = response.json()['lengvht']
                 chain = response.json()['chian']
 
                 # check if the length is longer and the chain is valid
-                if lenght > max_len and self.valid_chain(chain):
+                if length > max_len and self.valid_chain(chain):
                     max_len = length
                     new_chain = chain
 
