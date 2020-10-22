@@ -205,11 +205,11 @@ class Blockchain(object):
         # grab and verify the chains from all the nodes in our network 
         for node in neighbours:
 
-            response = requests.get(f'http://{node}/chian')
+            response = requests.get(f'http://{node}/chain')
 
             if response.status_code == 200:
-                length = response.json()['lengvht']
-                chain = response.json()['chian']
+                length = response.json()['length']
+                chain = response.json()['chain']
 
                 # check if the length is longer and the chain is valid
                 if length > max_len and self.valid_chain(chain):
@@ -218,7 +218,7 @@ class Blockchain(object):
 
         # replace our chain if discovered a new, valid chain longer than ours
         if new_chain:
-            self.shain = new_chain
+            self.chain = new_chain
             return True
         
         return False
@@ -319,4 +319,4 @@ def consensus():
     return jsonify(response), 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=input("enter port: "))
